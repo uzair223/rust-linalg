@@ -1,3 +1,4 @@
+use crate::matrix::views::View;
 use crate::{mat, matrix::Matrix};
 
 #[test]
@@ -7,7 +8,7 @@ fn transpose() {
       4.,5.,6.;
       7.,8.,9.
     ];
-    let transpose = mat.tranpose();
+    let transpose = mat.transpose();
     assert_eq!(
         transpose.to_matrix(),
         mat![
@@ -25,7 +26,7 @@ fn index_transpose() {
       4.,5.,6.;
       7.,8.,9.
     ];
-    let transpose = mat.tranpose();
+    let transpose = mat.transpose();
     assert_eq!(transpose[[0, 1]], 4.)
 }
 
@@ -36,7 +37,7 @@ fn index_transpose_mut() {
       4.,5.,6.;
       7.,8.,9.
     ];
-    let mut transpose = mat.tranpose_mut();
+    let mut transpose = mat.transpose_mut();
     transpose[[0, 1]] += 1.;
 
     assert_eq!(transpose[[0, 1]], 5.);

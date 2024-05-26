@@ -41,7 +41,7 @@ mod index_ops;
 mod matrix_ops;
 mod ops;
 mod scalar_ops;
-mod transpose;
+mod views;
 
 #[cfg(test)]
 mod tests;
