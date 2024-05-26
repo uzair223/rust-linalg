@@ -28,4 +28,78 @@ impl Matrix {
         det
     }
 
+    pub fn swap_rows(&mut self, a: usize, b: usize) {
+        if a == b {
+            return;
+        }
+        let row_a = a * self.shape.1..(a + 1) * self.shape.1;
+        let row_b = b * self.shape.1..(b + 1) * self.shape.1;
+        for (i, j) in itertools::zip_eq(row_a, row_b) {
+            self.data.swap(i, j)
+        }
+    }
+
+    pub fn gauss(&self, singular_error: bool) -> Matrix {
+        let (rows, cols) = self.shape;
+        let mut mat = self.clone();
+        let mut lead = 0;
+        for r in 0..rows {
+            if lead >= cols {
+                break;
+            }
+            let mut i = r;
+            while i < rows && mat[[i, lead]] == 0. {
+                i += 1;
+            }
+            if i == rows {
+                if singular_error {
+                    panic!("matrix is singular")
+                }
+                break;
+            }
+            mat.swap_rows(i, r);
+            let divisor = mat[[r, lead]];
+            if divisor == 0. {
+                if singular_error {
+                    panic!("matrix is singular")
+                }
+                break;
+            }
+            for j in 0..cols {
+                mat[[r, j]] /= divisor;
+            }
+            for i in 0..rows {
+                if i != r {
+                    let factor = mat[[i, lead]];
+                    for j in 0..cols {
+                        mat[[i, j]] -= factor * mat[[r, j]];
+                    }
+                }
+            }
+            lead += 1;
+        }
+        mat
+    }
+
+    pub fn inverse(&self) -> Matrix {
+        _check_square!(&self);
+        let n = self.shape.0;
+        let eye = Self::eye(n);
+
+        let mut vec: Vec<f64> = vec![];
+        for i in 0..n {
+            vec.extend(self.data[i * n..(i + 1) * n].iter());
+            vec.extend(eye.data[i * n..(i + 1) * n].iter())
+        }
+        let aug = Matrix::from(vec, (n, n * 2)).gauss(true);
+
+        let mut data: Vec<f64> = vec![];
+        for i in 0..n {
+            data.extend(aug.data[i * n * 2..(i + 1) * n * 2][n..].iter());
+        }
+        Self {
+            data,
+            shape: self.shape,
+        }
+    }
 }
