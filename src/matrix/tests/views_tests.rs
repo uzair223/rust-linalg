@@ -20,7 +20,18 @@ fn transpose() {
 }
 
 #[test]
-fn index_transpose() {
+fn slice() {
+    let mat = mat![
+      1.,2.,3.;
+      4.,5.,6.;
+      7.,8.,9.
+    ];
+    let slice = mat.slice((1..3, ..2));
+    assert_eq!(slice.to_matrix(), mat![4.,5.; 7.,8.])
+}
+
+#[test]
+fn index_view() {
     let mat = mat![
       1.,2.,3.;
       4.,5.,6.;
@@ -31,7 +42,7 @@ fn index_transpose() {
 }
 
 #[test]
-fn index_transpose_mut() {
+fn index_view_mut() {
     let mut mat = mat![
       1.,2.,3.;
       4.,5.,6.;

@@ -30,7 +30,7 @@ impl View for MatrixTransposeView<'_> {
         (self.matrix.shape.1, self.matrix.shape.0)
     }
 
-    fn to_matrix_index([i, j]: [usize; 2]) -> [usize; 2] {
+    fn to_matrix_index(&self, [i, j]: [usize; 2]) -> [usize; 2] {
         [j, i]
     }
 }
@@ -44,7 +44,7 @@ impl View for MatrixTransposeViewMut<'_> {
         (self.matrix.shape.1, self.matrix.shape.0)
     }
 
-    fn to_matrix_index([i, j]: [usize; 2]) -> [usize; 2] {
+    fn to_matrix_index(&self, [i, j]: [usize; 2]) -> [usize; 2] {
         [j, i]
     }
 }
