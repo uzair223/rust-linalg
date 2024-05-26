@@ -1,6 +1,16 @@
 use super::Matrix;
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
+impl Matrix {
+    pub fn equals(self, other: Self, eps: f64) -> bool {
+        let dist = self - other;
+        for d in dist.iter() {
+            if d.abs() > eps { return false; }
+        }
+        true
+    }
+}
+
 impl PartialEq for Matrix {
     fn eq(&self, other: &Self) -> bool {
         self.data == other.data
