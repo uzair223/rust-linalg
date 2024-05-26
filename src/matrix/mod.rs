@@ -39,6 +39,7 @@ macro_rules! _check_square {
 mod constructors;
 mod index_ops;
 mod matrix_ops;
+mod ops;
 mod scalar_ops;
 mod transpose;
 
