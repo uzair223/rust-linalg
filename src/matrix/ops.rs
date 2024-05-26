@@ -1,5 +1,4 @@
 use super::Matrix;
-use itertools::Itertools;
 
 impl Matrix {
     pub fn get_minor(&self, i: usize, j: usize) -> Matrix {
@@ -7,7 +6,7 @@ impl Matrix {
         // deleting row
         data.drain(i * self.shape.1..(i + 1) * self.shape.1);
         // deleting column
-        for i in 0..self.shape.0-1 {
+        for i in 0..self.shape.0 - 1 {
             // column index change as we remove previous entries
             data.remove(i * self.shape.1 + j - i);
         }
@@ -18,7 +17,7 @@ impl Matrix {
         _check_square!(&self);
         if self.shape.0 == 2 {
             /*|a,b|
-              |c,d| = ad - bc */
+            |c,d| = ad - bc */
             return self[[0, 0]] * self[[1, 1]] - self[[0, 1]] * self[[1, 0]];
         }
         let mut det = 0.;

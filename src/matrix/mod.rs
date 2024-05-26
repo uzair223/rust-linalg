@@ -43,6 +43,5 @@ mod ops;
 mod scalar_ops;
 mod transpose;
 
-
 #[cfg(test)]
 mod tests;

@@ -5,7 +5,9 @@ impl Matrix {
     pub fn equals(self, other: Self, eps: f64) -> bool {
         let dist = self - other;
         for d in dist.iter() {
-            if d.abs() > eps { return false; }
+            if d.abs() > eps {
+                return false;
+            }
         }
         true
     }
