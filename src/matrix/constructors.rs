@@ -46,7 +46,7 @@ impl Matrix {
     pub fn eye(n: usize) -> Matrix {
         let mut data = vec![0.; n * n];
         for i in 0..n {
-            data[i * n] = 1.
+            data[i*n+i] = 1.
         }
         Matrix {
             data,
