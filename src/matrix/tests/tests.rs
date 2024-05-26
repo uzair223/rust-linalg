@@ -47,3 +47,27 @@ fn matrix_op_assign() {
     a += mat![5., 6.; 7., 8.];
     assert_eq!(a, mat![6., 8.; 10., 12.])
 }
+
+#[test]
+fn is_upper_triangular() {
+    let a = mat![
+        1., 2., 3.;
+        0., 4., 5.;
+        0., 0., 6.];
+    assert!(a.is_upper_triangular())
+}
+
+#[test]
+fn is_lower_triangular() {
+    let a = mat![
+        1., 0., 0.;
+        2., 4., 0.;
+        3., 5., 6.];
+    assert!(a.is_lower_triangular())
+}
+
+#[test]
+fn diag() {
+    let a = mat![1., 2., 3.; 4., 5., 6.; 7., 8., 9.];
+    assert_eq!(a.diag(), [1., 5., 9.])
+}

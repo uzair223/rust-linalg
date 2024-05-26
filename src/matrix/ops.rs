@@ -101,4 +101,46 @@ impl Matrix {
             shape: self.shape,
         }
     }
+
+    pub fn is_square(&self) -> bool {
+        self.shape.0 == self.shape.1
+    }
+
+    pub fn is_upper_triangular(&self) -> bool {
+        if !self.is_square() {
+            return false;
+        }
+        for i in 1..self.shape.0 {
+            for j in 0..i {
+                if self[[i, j]] != 0. {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+
+    pub fn is_lower_triangular(&self) -> bool {
+        if !self.is_square() {
+            return false;
+        }
+        for i in 0..self.shape.0 - 1 {
+            for j in i + 1..self.shape.0 {
+                if self[[i, j]] != 0. {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+
+    pub fn is_triangular(&self) -> bool {
+        self.is_upper_triangular() | self.is_lower_triangular()
+    }
+
+    pub fn diag(&self) -> Vec<f64> {
+        (0..usize::min(self.shape.0, self.shape.1))
+            .map(|i| self[[i, i]])
+            .collect()
+    }
 }
