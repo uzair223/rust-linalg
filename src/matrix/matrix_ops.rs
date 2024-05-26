@@ -23,7 +23,7 @@ impl PartialEq for Matrix {
 }
 
 impl Matrix {
-    pub fn dot(self, rhs: &Self) -> Self {
+    pub fn dot(self, rhs: Self) -> Self {
         if self.shape.1 != rhs.shape.0 {
             panic!(
                 "shape mismatch: dot product cannot be between {:?} and {:?}",
