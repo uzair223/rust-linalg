@@ -20,3 +20,14 @@ macro_rules! mat {
         }
     };
 }
+
+#[macro_export]
+macro_rules! vector {
+    ($elem:expr; $n:expr) => {
+        Vector::empty($elem, $n)
+    };
+
+    ($($val:expr),+ $(,)?) => {
+        Vector::new(vec![$($val),+])
+    };
+}
