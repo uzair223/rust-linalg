@@ -1,6 +1,6 @@
 use core::ops::{Index, IndexMut};
 
-use super::{View, ViewMut};
+use super::{View, ViewMut, ViewToMatrix};
 use crate::matrix::Matrix;
 
 impl Matrix {
@@ -22,6 +22,8 @@ pub struct MatrixTransposeViewMut<'a> {
 }
 
 impl View for MatrixTransposeView<'_> {
+    type Index = [usize; 2];
+    
     fn matrix(&self) -> &Matrix {
         self.matrix
     }
@@ -36,6 +38,8 @@ impl View for MatrixTransposeView<'_> {
 }
 
 impl View for MatrixTransposeViewMut<'_> {
+    type Index = [usize; 2];
+
     fn matrix(&self) -> &Matrix {
         self.matrix
     }
@@ -49,6 +53,8 @@ impl View for MatrixTransposeViewMut<'_> {
     }
 }
 
+impl ViewToMatrix for MatrixTransposeView<'_> {}
+impl ViewToMatrix for MatrixTransposeViewMut<'_> {}
 impl ViewMut for MatrixTransposeViewMut<'_> {}
 
 impl Index<[usize; 2]> for MatrixTransposeView<'_> {

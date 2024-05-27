@@ -1,6 +1,6 @@
 use core::ops::{Index, IndexMut, RangeBounds};
 
-use super::{View, ViewMut};
+use super::{View, ViewMut, ViewToMatrix};
 use crate::matrix::Matrix;
 
 pub struct MatrixSliceView<'a> {
@@ -62,6 +62,8 @@ impl Matrix {
 }
 
 impl View for MatrixSliceView<'_> {
+    type Index = [usize; 2];
+
     fn matrix(&self) -> &Matrix {
         self.matrix
     }
@@ -76,6 +78,8 @@ impl View for MatrixSliceView<'_> {
 }
 
 impl View for MatrixSliceViewMut<'_> {
+    type Index = [usize; 2];
+
     fn matrix(&self) -> &Matrix {
         self.matrix
     }
@@ -89,6 +93,8 @@ impl View for MatrixSliceViewMut<'_> {
     }
 }
 
+impl ViewToMatrix for MatrixSliceView<'_> {}
+impl ViewToMatrix for MatrixSliceViewMut<'_> {}
 impl ViewMut for MatrixSliceViewMut<'_> {}
 
 impl Index<[usize; 2]> for MatrixSliceView<'_> {

@@ -1,5 +1,5 @@
-use crate::matrix::views::View;
-use crate::{matrix, matrix::Matrix};
+use crate::matrix::views::{ViewToMatrix, ViewToVector};
+use crate::{vector, matrix, matrix::Matrix, vector::Vector};
 
 #[test]
 fn transpose() {
@@ -28,6 +28,16 @@ fn slice() {
     ];
     let slice = mat.slice((1..3, ..2));
     assert_eq!(slice.to_matrix(), matrix![4.,5.; 7.,8.])
+}
+
+#[test]
+fn row_column() {
+    let mat = matrix![
+      1.,2.,3.;
+      4.,5.,6.;
+      7.,8.,9.
+    ];
+    assert_eq!(mat.column(0).to_vector(), vector![1., 4., 7.])
 }
 
 #[test]
