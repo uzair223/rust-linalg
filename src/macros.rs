@@ -1,5 +1,5 @@
 #[macro_export]
-macro_rules! mat {
+macro_rules! matrix {
     ( $( $($val:expr),+ );* $(;)? ) => {
         {
             let mut data = Vec::<f64>::new();

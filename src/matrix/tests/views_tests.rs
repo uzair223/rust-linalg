@@ -1,9 +1,9 @@
 use crate::matrix::views::View;
-use crate::{mat, matrix::Matrix};
+use crate::{matrix, matrix::Matrix};
 
 #[test]
 fn transpose() {
-    let mat = mat![
+    let mat = matrix![
       1.,2.,3.;
       4.,5.,6.;
       7.,8.,9.
@@ -11,7 +11,7 @@ fn transpose() {
     let transpose = mat.transpose();
     assert_eq!(
         transpose.to_matrix(),
-        mat![
+        matrix![
           1.,4.,7.;
           2.,5.,8.;
           3.,6.,9.;
@@ -21,18 +21,18 @@ fn transpose() {
 
 #[test]
 fn slice() {
-    let mat = mat![
+    let mat = matrix![
       1.,2.,3.;
       4.,5.,6.;
       7.,8.,9.
     ];
     let slice = mat.slice((1..3, ..2));
-    assert_eq!(slice.to_matrix(), mat![4.,5.; 7.,8.])
+    assert_eq!(slice.to_matrix(), matrix![4.,5.; 7.,8.])
 }
 
 #[test]
 fn index_view() {
-    let mat = mat![
+    let mat = matrix![
       1.,2.,3.;
       4.,5.,6.;
       7.,8.,9.
@@ -43,7 +43,7 @@ fn index_view() {
 
 #[test]
 fn index_view_mut() {
-    let mut mat = mat![
+    let mut mat = matrix![
       1.,2.,3.;
       4.,5.,6.;
       7.,8.,9.
