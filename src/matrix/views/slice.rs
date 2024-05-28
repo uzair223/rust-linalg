@@ -95,7 +95,16 @@ impl View for MatrixSliceViewMut<'_> {
 
 impl ViewToMatrix for MatrixSliceView<'_> {}
 impl ViewToMatrix for MatrixSliceViewMut<'_> {}
-impl ViewMut for MatrixSliceViewMut<'_> {}
+impl ViewMut for MatrixSliceViewMut<'_> {
+    fn assign(&mut self, new: &[f64]) -> () {
+        assert_eq!(self.shape.0 * self.shape.1, new.len(), "shape mismatch: {} cannot be reshaped into {}x{}", new.len(), self.shape.0, self.shape.1);
+        for i in 0..self.shape.0 {
+            for j in 0..self.shape.1 {
+                self[[i, j]] = new[i * self.shape.1 + j];
+            }
+        }
+    }
+}
 
 impl Index<[usize; 2]> for MatrixSliceView<'_> {
     type Output = f64;
@@ -114,5 +123,21 @@ impl Index<[usize; 2]> for MatrixSliceViewMut<'_> {
 impl IndexMut<[usize; 2]> for MatrixSliceViewMut<'_> {
     fn index_mut(&mut self, index: [usize; 2]) -> &mut Self::Output {
         ViewMut::index_mut(self, index)
+    }    
+}
+
+impl MatrixSliceView<'_> {
+    pub fn to_matrix(&self) -> Matrix {
+        ViewToMatrix::to_matrix(self)
+    }
+}
+
+impl MatrixSliceViewMut<'_> {
+    pub fn to_matrix(&self) -> Matrix {
+        ViewToMatrix::to_matrix(self)
+    }
+
+    pub fn assign(&mut self, new: &[f64]) {
+        ViewMut::assign(self, new)
     }
 }

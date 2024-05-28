@@ -55,7 +55,11 @@ impl View for MatrixTransposeViewMut<'_> {
 
 impl ViewToMatrix for MatrixTransposeView<'_> {}
 impl ViewToMatrix for MatrixTransposeViewMut<'_> {}
-impl ViewMut for MatrixTransposeViewMut<'_> {}
+impl ViewMut for MatrixTransposeViewMut<'_> {
+    fn assign(&mut self, _: &[f64]) -> () {
+        todo!()
+    }
+}
 
 impl Index<[usize; 2]> for MatrixTransposeView<'_> {
     type Output = f64;
@@ -74,5 +78,21 @@ impl Index<[usize; 2]> for MatrixTransposeViewMut<'_> {
 impl IndexMut<[usize; 2]> for MatrixTransposeViewMut<'_> {
     fn index_mut(&mut self, index: [usize; 2]) -> &mut Self::Output {
         ViewMut::index_mut(self, index)
+    }
+}
+
+impl MatrixTransposeView<'_> {
+    pub fn to_matrix(&self) -> Matrix {
+        ViewToMatrix::to_matrix(self)
+    }
+}
+
+impl MatrixTransposeViewMut<'_> {
+    pub fn to_matrix(&self) -> Matrix {
+        ViewToMatrix::to_matrix(self)
+    }
+
+    pub fn assign(&mut self, new: &[f64]) {
+        ViewMut::assign(self, new)
     }
 }

@@ -23,6 +23,8 @@ pub trait ViewMut: View {
         let matrix: &mut Matrix = unsafe { &mut *(self.matrix() as *const Matrix as *mut Matrix) };
         &mut matrix[self.to_matrix_index(index)]
     }
+
+    fn assign(&mut self, new: &[f64]) -> ();
 }
 
 #[allow(dead_code)]

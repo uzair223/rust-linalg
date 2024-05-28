@@ -1,6 +1,6 @@
 use std::ops::{Index, IndexMut};
 
-use crate::{matrix::Matrix, vector::VectorType};
+use crate::{matrix::Matrix, vector::{Vector, VectorType}};
 use super::{View, ViewMut, ViewToVector};
 
 impl Matrix {
@@ -90,7 +90,14 @@ impl ViewToVector for MatrixRowColumnViewMut<'_> {
     }
 }
 
-impl ViewMut for MatrixRowColumnViewMut<'_> {}
+impl ViewMut for MatrixRowColumnViewMut<'_> {
+    fn assign(&mut self, new: &[f64]) {
+        assert_eq!(self.size, new.len(), "size mismatch: new size {} != original size {}", new.len(), self.size);
+        for i in 0..self.size {
+            self[i] = new[i];
+        }
+    }
+}
 
 impl Index<usize> for MatrixRowColumnView<'_> {
     type Output = f64;
@@ -109,5 +116,22 @@ impl Index<usize> for MatrixRowColumnViewMut<'_> {
 impl IndexMut<usize> for MatrixRowColumnViewMut<'_> {
     fn index_mut(&mut self, index: usize) -> &mut Self::Output {
         ViewMut::index_mut(self, index)
+    }
+}
+
+
+impl MatrixRowColumnView<'_> {
+    pub fn to_vector(&self) -> Vector {
+        ViewToVector::to_vector(self)
+    }
+}
+
+impl MatrixRowColumnViewMut<'_> {
+    pub fn to_vector(&self) -> Vector {
+        ViewToVector::to_vector(self)
+    }
+
+    pub fn assign(&mut self, new: &[f64]) {
+        ViewMut::assign(self, new)
     }
 }

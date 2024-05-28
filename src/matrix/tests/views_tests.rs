@@ -1,4 +1,3 @@
-use crate::matrix::views::{ViewToMatrix, ViewToVector};
 use crate::{vector, matrix, matrix::Matrix, vector::Vector};
 
 #[test]
@@ -63,4 +62,17 @@ fn index_view_mut() {
 
     assert_eq!(transpose[[0, 1]], 5.);
     assert_eq!(mat[[1, 0]], 5.)
+}
+
+#[test]
+fn view_assign() {
+  let mut mat = matrix![
+    1.,2.,3.;
+    4.,5.,6.;
+    7.,8.,9.
+  ];
+  let mut column = mat.column_mut(0);
+  column.assign(&[0.,0.,0.]);
+  assert_eq!(column.to_vector(), vector![0.,0.,0.]);
+  assert_eq!(mat, matrix![0., 2., 3.; 0., 5., 6.; 0., 8., 9.]);
 }
