@@ -29,7 +29,7 @@ impl Vector {
     pub fn to_matrix(&self, t: VectorType) -> Matrix {
         match t {
             VectorType::Column => Matrix::from(self.data.clone(), (self.size, 1)),
-            VectorType::Row => Matrix::from(self.data.clone(), (1, self.size))
+            VectorType::Row => Matrix::from(self.data.clone(), (1, self.size)),
         }
     }
 }

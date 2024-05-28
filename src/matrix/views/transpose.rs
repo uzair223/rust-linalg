@@ -23,7 +23,7 @@ pub struct MatrixTransposeViewMut<'a> {
 
 impl View for MatrixTransposeView<'_> {
     type Index = [usize; 2];
-    
+
     fn matrix(&self) -> &Matrix {
         self.matrix
     }

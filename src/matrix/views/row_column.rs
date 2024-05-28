@@ -1,37 +1,58 @@
 use std::ops::{Index, IndexMut};
 
-use crate::{matrix::Matrix, vector::{Vector, VectorType}};
 use super::{View, ViewMut, ViewToVector};
+use crate::{
+    matrix::Matrix,
+    vector::{Vector, VectorType},
+};
 
 impl Matrix {
     pub fn row(&self, index: usize) -> MatrixRowColumnView {
-        MatrixRowColumnView { matrix: self, index, t: VectorType::Row, size: self.shape.1 }
+        MatrixRowColumnView {
+            matrix: self,
+            index,
+            t: VectorType::Row,
+            size: self.shape.1,
+        }
     }
     pub fn row_mut(&mut self, index: usize) -> MatrixRowColumnViewMut {
-        MatrixRowColumnViewMut { matrix: self, index, t: VectorType::Row, size: self.shape.1 }
+        MatrixRowColumnViewMut {
+            matrix: self,
+            index,
+            t: VectorType::Row,
+            size: self.shape.1,
+        }
     }
     pub fn column(&self, index: usize) -> MatrixRowColumnView {
-        MatrixRowColumnView { matrix: self, index, t: VectorType::Column, size: self.shape.0 }
+        MatrixRowColumnView {
+            matrix: self,
+            index,
+            t: VectorType::Column,
+            size: self.shape.0,
+        }
     }
     pub fn column_mut(&mut self, index: usize) -> MatrixRowColumnViewMut {
-        MatrixRowColumnViewMut { matrix: self, index, t: VectorType::Column, size: self.shape.0 }
+        MatrixRowColumnViewMut {
+            matrix: self,
+            index,
+            t: VectorType::Column,
+            size: self.shape.0,
+        }
     }
-
 }
-
 
 pub struct MatrixRowColumnView<'a> {
     matrix: &'a Matrix,
     index: usize,
     size: usize,
-    t: VectorType
+    t: VectorType,
 }
 
 pub struct MatrixRowColumnViewMut<'a> {
     matrix: &'a Matrix,
     index: usize,
     size: usize,
-    t: VectorType
+    t: VectorType,
 }
 
 impl View for MatrixRowColumnView<'_> {
@@ -43,11 +64,11 @@ impl View for MatrixRowColumnView<'_> {
             VectorType::Column => (self.size, 1),
         }
     }
-    
+
     fn matrix(&self) -> &Matrix {
         self.matrix
     }
-    
+
     fn to_matrix_index(&self, view_index: usize) -> [usize; 2] {
         match self.t {
             VectorType::Row => [self.index, view_index],
@@ -92,7 +113,13 @@ impl ViewToVector for MatrixRowColumnViewMut<'_> {
 
 impl ViewMut for MatrixRowColumnViewMut<'_> {
     fn assign(&mut self, new: &[f64]) {
-        assert_eq!(self.size, new.len(), "size mismatch: new size {} != original size {}", new.len(), self.size);
+        assert_eq!(
+            self.size,
+            new.len(),
+            "size mismatch: new size {} != original size {}",
+            new.len(),
+            self.size
+        );
         for i in 0..self.size {
             self[i] = new[i];
         }
@@ -118,7 +145,6 @@ impl IndexMut<usize> for MatrixRowColumnViewMut<'_> {
         ViewMut::index_mut(self, index)
     }
 }
-
 
 impl MatrixRowColumnView<'_> {
     pub fn to_vector(&self) -> Vector {
