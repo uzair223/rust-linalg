@@ -106,13 +106,13 @@ impl Matrix {
         self.shape.0 == self.shape.1
     }
 
-    pub fn is_upper_triangular(&self) -> bool {
+    pub fn is_upper_triangular(&self, eps: f64) -> bool {
         if !self.is_square() {
             return false;
         }
         for i in 1..self.shape.0 {
             for j in 0..i {
-                if self[[i, j]] != 0. {
+                if self[[i, j]] > eps {
                     return false;
                 }
             }
@@ -120,13 +120,13 @@ impl Matrix {
         true
     }
 
-    pub fn is_lower_triangular(&self) -> bool {
+    pub fn is_lower_triangular(&self, eps: f64) -> bool {
         if !self.is_square() {
             return false;
         }
         for i in 0..self.shape.0 - 1 {
             for j in i + 1..self.shape.0 {
-                if self[[i, j]] != 0. {
+                if self[[i, j]] > eps {
                     return false;
                 }
             }
@@ -134,8 +134,8 @@ impl Matrix {
         true
     }
 
-    pub fn is_triangular(&self) -> bool {
-        self.is_upper_triangular() | self.is_lower_triangular()
+    pub fn is_triangular(&self, eps: f64) -> bool {
+        self.is_upper_triangular(eps) | self.is_lower_triangular(eps)
     }
 
     pub fn diag(&self) -> Vec<f64> {

@@ -54,7 +54,7 @@ fn is_upper_triangular() {
         1., 2., 3.;
         0., 4., 5.;
         0., 0., 6.];
-    assert!(a.is_upper_triangular())
+    assert!(a.is_upper_triangular(1e-10))
 }
 
 #[test]
@@ -63,7 +63,7 @@ fn is_lower_triangular() {
         1., 0., 0.;
         2., 4., 0.;
         3., 5., 6.];
-    assert!(a.is_lower_triangular())
+    assert!(a.is_lower_triangular(1e-10))
 }
 
 #[test]
