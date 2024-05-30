@@ -30,6 +30,17 @@ fn slice() {
 }
 
 #[test]
+fn slice_index() {
+    let mat = matrix![
+      1.,2.,3.;
+      4.,5.,6.;
+      7.,8.,9.
+    ];
+    let slice = mat.slice((1..3, 2));
+    assert_eq!(slice.to_matrix(), matrix![6.; 9.])
+}
+
+#[test]
 fn row_column() {
     let mat = matrix![
       1.,2.,3.;

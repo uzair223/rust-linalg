@@ -1,4 +1,4 @@
-use core::ops::{Index, IndexMut, RangeBounds};
+use core::ops::{Index, IndexMut, Range, RangeFrom, RangeTo, RangeFull};
 
 use super::{View, ViewMut, ViewToMatrix};
 use crate::matrix::Matrix;
@@ -15,48 +15,101 @@ pub struct MatrixSliceViewMut<'a> {
     shape: (usize, usize),
 }
 
-fn range<T: RangeBounds<usize>>(min: usize, max: usize, range: T) -> (usize, usize) {
-    let start = match range.start_bound() {
-        std::ops::Bound::Included(&start) => start,
-        std::ops::Bound::Excluded(&start) => start,
-        std::ops::Bound::Unbounded => min,
-    };
 
-    let end = match range.end_bound() {
-        std::ops::Bound::Included(&end) => end,
-        std::ops::Bound::Excluded(&end) => end,
-        std::ops::Bound::Unbounded => max,
-    };
+pub trait Slice {
+    fn begin(&self) -> usize;
+    fn end(&self, max: usize) -> usize;
+    #[inline(always)]
+    fn size(&self, max: usize) -> usize {
+        self.end(max) - self.begin()
+    }
+}
 
-    return (start, end);
+impl Slice for usize {
+    #[inline(always)]
+    fn begin(&self) -> usize {
+        *self
+    }
+
+    #[inline(always)]
+    fn end(&self, _: usize) -> usize {
+        self + 1
+    }
+
+    #[inline(always)]
+    fn size(&self, _: usize) -> usize {
+        1
+    }
+}
+
+impl Slice for Range<usize> {
+    #[inline(always)]
+    fn begin(&self) -> usize {
+        self.start
+    }
+    
+    #[inline(always)]
+    fn end(&self, _: usize) -> usize {
+        self.end
+    }
+}
+
+impl Slice for RangeFrom<usize> {
+    #[inline(always)]
+    fn begin(&self) -> usize {
+        self.start
+    }
+
+    #[inline(always)]
+    fn end(&self, max: usize) -> usize {
+        max
+    }
+}
+
+impl Slice for RangeTo<usize> {
+    #[inline(always)]
+    fn begin(&self) -> usize {
+        0
+    }
+
+    #[inline(always)]
+    fn end(&self, _: usize) -> usize {
+        self.end
+    }
+}
+
+impl Slice for RangeFull {
+    #[inline(always)]
+    fn begin(&self) -> usize {
+        0
+    }
+
+    #[inline(always)]
+    fn end(&self, max: usize) -> usize {
+        max
+    }
 }
 
 impl Matrix {
-    pub fn slice<R: RangeBounds<usize>, C: RangeBounds<usize>>(
+    pub fn slice<R: Slice, C: Slice>(
         &self,
-        (row_range, col_range): (R, C),
+        (r, c): (R, C),
     ) -> MatrixSliceView {
-        let (row_start, row_end) = range(0, self.shape.0, row_range);
-        let (col_start, col_end) = range(0, self.shape.1, col_range);
-
         MatrixSliceView {
             matrix: self,
-            offset: (row_start, col_start),
-            shape: (row_end - row_start, col_end - col_start),
+            offset: (r.begin(), c.begin()),
+            shape: (r.size(self.shape.0), c.size(self.shape.1)),
         }
     }
 
-    pub fn slice_mut<R: RangeBounds<usize>, C: RangeBounds<usize>>(
+    pub fn slice_mut<R: Slice, C: Slice>(
         &mut self,
-        (row_range, col_range): (R, C),
+        (r, c): (R, C),
     ) -> MatrixSliceViewMut {
-        let (row_start, row_end) = range(0, self.shape.0, row_range);
-        let (col_start, col_end) = range(0, self.shape.1, col_range);
-
         MatrixSliceViewMut {
             matrix: self,
-            offset: (row_start, col_start),
-            shape: (row_end - row_start, col_end - col_start),
+            offset: (r.begin(), c.begin()),
+            shape: (r.size(self.shape.0), c.size(self.shape.1)),
         }
     }
 }
