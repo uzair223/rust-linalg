@@ -12,7 +12,7 @@ fn dot_product() {
         3., 4.;
     ];
     assert_eq!(
-        a.dot(b),
+        a.dot(&b),
         matrix![
              7., 10.;
             15., 22.;

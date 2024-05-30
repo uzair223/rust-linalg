@@ -6,7 +6,7 @@ use crate::{vector, vector::Vector};
 fn dot_product() {
     let a = vector![1., 2., 3.];
     let b = vector![4., 5., 6.];
-    assert_eq!(a.dot(b), 32.)
+    assert_eq!(a.dot(&b), 32.)
 }
 
 #[test]

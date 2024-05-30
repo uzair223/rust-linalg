@@ -25,7 +25,7 @@ impl PartialEq for Vector {
 }
 
 impl Vector {
-    pub fn dot(self, rhs: Self) -> f64 {
+    pub fn dot(&self, rhs: &Self) -> f64 {
         _check_same_size!(self, rhs);
         self.iter()
             .zip(rhs.iter())
@@ -46,7 +46,7 @@ impl Vector {
         _check_same_size!(self, rhs);
         let a_norm = self.norm();
         let b_norm = rhs.norm();
-        let dot = self.dot(rhs);
+        let dot = self.dot(&rhs);
         f64::acos(dot / (a_norm * b_norm))
     }
 }

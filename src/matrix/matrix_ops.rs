@@ -1,3 +1,5 @@
+use crate::vector::Vector;
+
 use super::Matrix;
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 
@@ -23,7 +25,22 @@ impl PartialEq for Matrix {
 }
 
 impl Matrix {
-    pub fn dot(self, rhs: Self) -> Self {
+    pub fn dot(&self, rhs: &Matrix) -> Matrix {
+        <Matrix as Dot>::dot(&self, rhs)
+    }
+    pub fn dot_vec(&self, rhs: &Vector) -> Vector {
+        <Matrix as Dot<Vector>>::dot(&self, rhs)
+    }
+}
+
+trait Dot<Rhs = Self> {
+    type Output;
+    fn dot<'a>(&self, rhs: &'a Rhs) -> Self::Output;
+}
+
+impl Dot for Matrix {
+    type Output = Self;
+    fn dot(&self, rhs: &Self) -> Self::Output {
         if self.shape.1 != rhs.shape.0 {
             panic!(
                 "shape mismatch: dot product cannot be between {:?} and {:?}",
@@ -39,6 +56,15 @@ impl Matrix {
             }
         }
         dot
+    }
+}
+
+impl Dot<Vector> for Matrix {
+    type Output = Vector;
+    fn dot(&self, rhs: &Vector) -> Self::Output {
+        Vector::new(
+            self.chunks(self.shape.0).map(|row| Vector::new(row.to_vec()).dot(rhs)).collect()
+        )
     }
 }
 
