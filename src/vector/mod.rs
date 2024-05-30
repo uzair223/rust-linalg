@@ -1,4 +1,4 @@
-use core::ops::{Deref, DerefMut};
+use core::{fmt, ops::{Deref, DerefMut}};
 
 use crate::matrix::Matrix;
 
@@ -31,6 +31,12 @@ impl Vector {
             VectorType::Column => Matrix::from(self.data.clone(), (self.size, 1)),
             VectorType::Row => Matrix::from(self.data.clone(), (1, self.size)),
         }
+    }
+}
+
+impl fmt::Display for Vector {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self.deref())
     }
 }
 

@@ -1,5 +1,4 @@
 use core::fmt;
-use itertools::Itertools;
 
 #[derive(Debug, Clone)]
 pub struct Matrix {
@@ -9,14 +8,32 @@ pub struct Matrix {
 
 impl fmt::Display for Matrix {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "[{}]",
-            self.data
-                .chunks(self.shape.1)
-                .map(|r| format!("{:?}", r))
-                .join("\n ")
-        )
+        let (rows, cols) = self.shape;
+        write!(f, "[")?;
+        for i in 0..rows {
+            if i == 0 {
+                write!(f, "[")?;
+            } else {
+                write!(f, " [")?;
+            }
+            for j in 0..cols {
+                if j > 0 {
+                    write!(f, " ")?; // add a space between columns
+                }
+                // Apply the formatter's precision settings to each element
+                if let Some(precision) = f.precision() {
+                    write!(f, "{:.1$}", self.data[i * cols + j], precision)?;
+                } else {
+                    write!(f, "{}", self.data[i * cols + j])?;
+                }
+            }
+            write!(f, "]")?;
+            if i < rows - 1 {
+                writeln!(f)?; // add a newline between rows
+            }
+        }
+        write!(f, "]")?;
+        Ok(())
     }
 }
 
