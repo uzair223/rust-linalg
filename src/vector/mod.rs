@@ -36,7 +36,12 @@ impl Vector {
 
 impl fmt::Display for Vector {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{:?}", self.deref())
+        if let Some(precision) = f.precision() {
+            write!(f, "{:.1$?}", self.data, precision)?;
+        } else {
+            write!(f, "{:?}", self.data)?;
+        }
+        Ok(())
     }
 }
 
