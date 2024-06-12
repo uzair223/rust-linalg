@@ -102,6 +102,43 @@ impl Matrix {
         }
     }
 
+    pub fn qr(&self) -> (Matrix, Matrix) {
+        let (_, n) = self.shape;
+
+        let mut q = self.clone();
+        let mut r = Matrix::empty(0., n, n);
+
+        for k in 0..n {
+            let mut qk = q.column(k).to_vector();
+            for i in 0..k {
+                let qi = q.column(i).to_vector();
+                r[[i, k]] = qi.dot(&qk);
+                qk -= qi * r[[i, k]];
+            }
+            r[[k, k]] = qk.norm();
+            q.column_mut(k).assign(&(qk / r[[k, k]]))
+        }
+
+        (q, r)
+    }
+
+
+    pub fn eigen(&self, eps: f64, max_iter: usize) -> (Vec<f64>, Matrix) {
+        let mut a = self.clone();
+        let mut q_total = Matrix::eye(self.shape.0);
+        
+        for _ in 0..max_iter {
+            let (q, r) = a.qr();
+            a = r.dot(&q);
+            q_total = q_total.dot(&q);
+            if a.is_upper_triangular(eps) {
+                break
+            }
+        }
+
+        (a.diag(), q_total)
+    }
+
     pub fn is_square(&self) -> bool {
         self.shape.0 == self.shape.1
     }
